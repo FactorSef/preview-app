@@ -2,9 +2,14 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App.jsx';
 import * as serviceWorker from './serviceWorker';
+import { StoreProvider } from './store';
 
 ReactDOM.render(
-	<App />,
+	(
+		<StoreProvider>
+			<App />
+		</StoreProvider>
+	),
 	document.getElementById('root')
 );
 

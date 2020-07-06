@@ -5,61 +5,40 @@ import { Button } from './components/Button';
 import { Input } from './components/Input';
 import { Textarea } from './components/Textarea';
 
-const model = {
-	name: '',
-	content: '',
-	complete: false,
-}
+import { useGlobalState } from './store'
 
 const App = (props) => {
-	const [todos, setTodos] = React.useState([
-		Object.assign({}, model, { name: 'Test 1', content: 'lol kek'}),
-		Object.assign({}, model, { name: 'Test 2', content: 'lol kek 2'}),
-		Object.assign({}, model, { name: 'Test 3', content: 'lol kek 3'}),
-	]);
-	const [selected, setSelected] = React.useState(null);
-	const [isNew, setIsNew] = React.useState(false);
-	const [search, setSearch] = React.useState('');
+	const [state, dispatch] = useGlobalState()
+	const { todos, selected, isNew, search } = state;
 
 	const handleSelected = (index) => (item) => {
 		if (isNew) {
-			setTodos([
-				...todos,
-				selected,
-			]);
+			dispatch({ type: 'AddToList', payload: selected })
 		}
 
 		if (index < 0) {
-			setSelected(null);
-			setIsNew(false);
+			dispatch({ type: 'Select' });
 			return;
 		}
 
-		setSelected(item);
+		dispatch({ type: 'Select', payload: { item } });
 	}
 
 	const handleChange = (index) => (value) => {
-		const nextTodos = [...todos];
-		nextTodos[index].complete = value;
-		setTodos(nextTodos);
-		console.log(index, value, todos)
+		dispatch({ type: 'Toggle', payload: { index, value } });
 	}
 
 	const changeNew = prop => value => {
-		setSelected({
-			...selected,
-			[prop]: value
-		});
+		dispatch({ type: 'ChangeSelectProp', payload: { prop, value } });
 	}
 
 	const getFiltred = () => {
 		const _search = search.toLowerCase();
-		
-		// -1 => ~-1 => 0 => !!0 => false
-		// 0 => ~0 => -1 => !!-1 => true
-		// 1 => ~1 => -2 => !!-2 => true
-
 		return todos.filter(todo => !!~todo.name.toLowerCase().indexOf(_search) || !!~todo.content.toLowerCase().indexOf(_search))
+	}
+
+	const handleSearch = (payload = '') => {
+		dispatch({ type: 'Search', payload });
 	}
 
 	return (
@@ -70,10 +49,12 @@ const App = (props) => {
 			<div className="layout-wrap">
 				<main className="layout-main">
 					<div className="header">
-						<Input value={search} onChange={setSearch} />
+						<Input value={search} onChange={handleSearch} />
 						<Button onClick={() => {
-							setSelected(Object.assign({}, model))
-							setIsNew(true);
+							const payload = {
+								isNew: true,
+							}
+							dispatch({ type: 'Select', payload })
 						}}>
 							Добавить новый
 						</Button>

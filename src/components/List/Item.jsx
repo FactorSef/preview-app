@@ -1,17 +1,23 @@
 import React from 'react';
 import classnames from 'classnames';
 
-export const Item = ({ item, onToggle, onClick }) => {
+import { observer } from 'mobx-react';
+import store from '../../mobx-store';
+
+export const Item = observer(({ item }) => {
+    const { select } = store;
+
     const { name, complete } = item;
+
     const handleChange = () => {
-        onToggle && onToggle(!item.complete);
+        item.complete = !item.complete;
     }
 
     return (
         <div className={classnames('list-item', complete && '-complete')}>
             <input type="checkbox" name={name} checked={complete} onChange={handleChange}/>
             <label htmlFor={name}>{name}</label>
-            {onClick && item.content && <>&nbsp;<span onClick={() => onClick(item)} className="list-item-more">Подробнее</span></>}
+            {item.content && <>&nbsp;<span onClick={() => select(item)} className="list-item-more">Подробнее</span></>}
         </div>
     )
-}
+})

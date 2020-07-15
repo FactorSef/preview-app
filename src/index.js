@@ -3,6 +3,14 @@ import ReactDOM from 'react-dom';
 import App from './App.jsx';
 import * as serviceWorker from './serviceWorker';
 import { StoreProvider } from './store';
+import 'antd/dist/antd.css';
+
+// import api from './api';
+
+// api.test()
+// 	.then(({ data }) => console.log('response', data))
+
+// .then(({ data }) => console.log('response2', data))
 
 ReactDOM.render(
 	(

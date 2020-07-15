@@ -1,4 +1,5 @@
 import { observable, action, computed } from 'mobx';
+import api from '../api';
 
 const model = {
 	name: '',
@@ -16,6 +17,19 @@ class MobxStore {
     @observable isNew = false;
     @observable search = '';
 
+    constructor() {
+        api.posts.getPosts()
+            .then(res => console.log(res));
+        api.todos.getTodos()
+            .then((data) => {
+                this.todos = data.map(todo => ({
+                    ...model,
+                    ...todo,
+                    name: todo.title,
+                }))
+            })
+    }
+
     @computed get count() {
         return this.todos.length;
     }
@@ -24,8 +38,8 @@ class MobxStore {
             const _search = this.search.toLowerCase();
             return this.todos
                 .filter(todo =>
-                    !!~todo.name.toLowerCase().indexOf(_search)
-                    || !!~todo.content.toLowerCase().indexOf(_search)
+                    (!!~todo.name.toLowerCase().indexOf(_search)
+                    || !!~todo.content.toLowerCase().indexOf(_search)) && !todo.complete
                 )
     }
 
@@ -41,6 +55,11 @@ class MobxStore {
         });
 
         if (this.isNew) {
+            api.addTodo({
+                title: this.selected.name,
+                complete: this.selected.complete,
+            })
+
             this.isNew = false;
         }
     }
@@ -54,8 +73,8 @@ class MobxStore {
     //     this.selected[prop] = value;
     // }
 
-    @action.bound changeSearch(value) {
-        this.search = value;
+    @action.bound changeSearch({ target }) {
+        this.search = target.value;
     }
 
     // @action.bound toggleCheckbox(index, value) {

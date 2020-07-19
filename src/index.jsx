@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App.jsx';
 import * as serviceWorker from './serviceWorker';
 import { StoreProvider } from './store';
+import { BrowserRouter } from 'react-router-dom';
 import 'antd/dist/antd.css';
 
 // import api from './api';
@@ -14,9 +14,11 @@ import 'antd/dist/antd.css';
 
 ReactDOM.render(
 	(
-		<StoreProvider>
-			<App />
-		</StoreProvider>
+		<BrowserRouter>
+			<StoreProvider>
+				<App />
+			</StoreProvider>
+		</BrowserRouter>
 	),
 	document.getElementById('root')
 );

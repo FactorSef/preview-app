@@ -30,6 +30,9 @@ const FormatText = (props) => {
                 }
             })
         }
+        case 'pre': { // pre
+            return <pre>{value}</pre>
+        }
         default: { // default
             return createElement(tag, {}, value)
         }

@@ -4,13 +4,7 @@ import * as serviceWorker from './serviceWorker';
 import { StoreProvider } from './store';
 import { BrowserRouter } from 'react-router-dom';
 import 'antd/dist/antd.css';
-
-// import api from './api';
-
-// api.test()
-// 	.then(({ data }) => console.log('response', data))
-
-// .then(({ data }) => console.log('response2', data))
+import App from './AppMultiline';
 
 ReactDOM.render(
 	(

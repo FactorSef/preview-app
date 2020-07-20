@@ -1,7 +1,7 @@
 import React, { createElement } from 'react';
 
 const FormatText = (props) => {
-    const { type = '', tag = 'div', value } = props;
+    const { type, tag, value } = props;
 
     switch (type) {
         case 'ce': { // create element
@@ -34,6 +34,12 @@ const FormatText = (props) => {
             return createElement(tag, {}, value)
         }
     }
+}
+
+FormatText.defaultProps = {
+    type: null,
+    tag: 'p',
+    value: '',
 }
 
 export { FormatText };
